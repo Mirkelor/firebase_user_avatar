@@ -6,21 +6,22 @@ import 'package:flutter/foundation.dart';
 import 'firestore_path.dart';
 
 class FirebaseStorageService {
+  final String uid;
+
+  FirebaseStorageService({@required this.uid}) : assert(uid != null);
+
   /// Upload an avatar from file
   Future<String> uploadAvatar({
-    @required String uid,
     @required File file,
   }) async =>
       await upload(
-        uid: uid,
         file: file,
-        path: FirestorePath.avatar(uid) + '/avatar.png',
-        contentType: 'image/png',
+        path: FirestorePath.avatar(uid) + '/avatar.jpg',
+        contentType: 'image/jpg',
       );
 
   /// Generic file upload for any [path] and [contentType]
   Future<String> upload({
-    @required String uid,
     @required File file,
     @required String path,
     @required String contentType,

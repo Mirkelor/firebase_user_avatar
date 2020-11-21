@@ -1,15 +1,17 @@
-
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_user_avatar/models/avatar_reference.dart';
-import 'firestore_path.dart';
 import 'package:flutter/foundation.dart';
 
+import 'firestore_path.dart';
+
 class FirestoreService {
-  // Sets the avatar download url
+  final String uid;
+
+  FirestoreService({@required this.uid}) : assert(uid != null);
+
   Future<void> setAvatarReference({
-    @required String uid,
     @required AvatarReference avatarReference,
   }) async {
     final path = FirestorePath.avatar(uid);
@@ -17,13 +19,11 @@ class FirestoreService {
     await reference.set(avatarReference.toMap());
   }
 
-  // Reads the current avatar download url
-  Stream<AvatarReference> avatarReferenceStream({
-    @required String uid,
-  }) {
+  Stream<AvatarReference> avatarReferenceStream() {
     final path = FirestorePath.avatar(uid);
     final reference = FirebaseFirestore.instance.doc(path);
     final snapshots = reference.snapshots();
-    return snapshots.map((snapshot) => AvatarReference.fromMap(snapshot.data()));
+    return snapshots
+        .map((snapshot) => AvatarReference.fromMap(snapshot.data()));
   }
 }
